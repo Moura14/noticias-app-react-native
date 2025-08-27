@@ -25,12 +25,14 @@ const NewsRepository = {
 
     async noticiasEspecificas(termo){
         try{
-            const response = await axios.get(`${endpoints.noticiasEspecificas(encodeURIComponent(termo))}&apiKey=${API_KEY}`)
-            console.log(response.data)
+
+            const url = `${endpoints.noticiasEspecificas(encodeURIComponent(termo))}&apiKey=${API_KEY}`
+            const response = await axios.get(url)
+            console.log(response.data.status)
             return response.data.articles
         }catch(error){
             console.log('Erro ao buscar noticias especificas', error.response)
-            throw error;
+            throw error
         }
     }
 }

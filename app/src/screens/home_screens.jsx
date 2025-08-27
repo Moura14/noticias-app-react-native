@@ -14,6 +14,11 @@ const HomeScreen = () => {
       try{
         setCarregando(true);
         const response = await NewsRepository.noticiasEspecificas(termo);
+
+        if(response.length === 0){
+          setErro('Nenhuma notícia encontrada. ')
+        }
+      
         setNoticias(response)
       }catch(error){
         console.log('Erro ao buscar notícias: ', error.response || error)

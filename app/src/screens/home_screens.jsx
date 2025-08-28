@@ -13,19 +13,26 @@ const HomeScreen = () => {
       if(!termo) return;
       try{
         setCarregando(true);
+        setErro(null)
         const response = await NewsRepository.noticiasEspecificas(termo);
 
         if(response.length === 0){
-          setErro('Nenhuma notícia encontrada. ')
+          setErro('Nenhuma notícia encontrada.')
+          setNoticias([])
+        }else{
+            setNoticias(response)
+            setErro(null);
         }
-      
-        setNoticias(response)
+
+        
+        console.log(response)
       }catch(error){
         console.log('Erro ao buscar notícias: ', error.response || error)
       }finally{
         setCarregando(false)
       }
     }
+    
 
   useEffect(() => {
 
@@ -47,21 +54,7 @@ const HomeScreen = () => {
   }, []);
 
 
-  if (carregando) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size='large' color="#0000ff" />
-      </View>
-    );
-  }
 
-  if (erro) {
-    return (
-      <View style={styles.errorContainer}>
-        <Text style={styles.errorText}>{erro}</Text>
-      </View>
-    );
-  }
 
   
   return (
@@ -78,6 +71,16 @@ const HomeScreen = () => {
               </TextInput>
       </View>
       </View>
+
+      {carregando ? (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size='large' color="#0000ff" />
+      </View>
+    ) : erro ? (
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText}>{erro}</Text>
+      </View>
+    ) :
       <FlatList
         data={noticias}
         keyExtractor={(item, index) => item.url + index}
@@ -91,6 +94,7 @@ const HomeScreen = () => {
           </TouchableOpacity>
         )}
       />
+}
     </View>
   );
 };

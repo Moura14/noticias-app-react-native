@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import NewsRepository from '../api/news_repository';
 
-const HomeScreen = () => {
+const HomeScreen = ({navigation}) => {
   const [termo, setTermo] = useState('');
   const [noticias, setNoticias] = useState([]);
   const [carregando, setCarregando] = useState(true);
@@ -60,7 +60,6 @@ const HomeScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
-        <Text style={styles.header}>Notícias</Text>
       <View style={styles.inputWrapper}>
         <TextInput style={styles.input}
               placeholder='Pesquisar...'
@@ -85,7 +84,9 @@ const HomeScreen = () => {
         data={noticias}
         keyExtractor={(item, index) => item.url + index}
         renderItem={({ item }) => (
-          <TouchableOpacity style={styles.card}>
+          <TouchableOpacity 
+          onPress={() => navigation.navigate("DetalheNoticia", {url: item.url})}
+          style={styles.card}>
             <Image source={{ uri: item.urlToImage }} style={styles.image} />
             <View style={styles.content}>
               <Text style={styles.title}>{item.title}</Text>
@@ -110,6 +111,7 @@ const styles = StyleSheet.create({
 
   inputWrapper: {
     flexDirection: 'row',
+    justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
     borderColor: "#ccc",
@@ -118,7 +120,10 @@ const styles = StyleSheet.create({
   },
 
   input: {
-    width: 300,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+    width: 200,
     padding: 10
   },
 
